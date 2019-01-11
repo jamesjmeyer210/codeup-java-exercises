@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# jcc
+# jcc - simple script for compiling java procjects
 
 if [ "$#" -ne "2" ]; then
   printf "$0: Error. Invalid number of arguments specified.\n"

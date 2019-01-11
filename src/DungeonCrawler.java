@@ -6,7 +6,6 @@ class Room {
   private int dimY;
 
   private ArrayList<String> rmap;
-
   private ArrayList<Enemy> enemies;
   private Hero hero;
 
