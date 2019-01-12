@@ -1,5 +1,50 @@
 import java.util.*;
 
+class Tuple<T,U> {
+
+  public T fisrt;
+  public U second;
+}
+
+class Cell {
+
+  private int coordinates[2];
+  private boolean collision; // read only, externally
+  private boolean hasHero;
+  private boolean hasEnemy;
+  private Tuple<Hero,Enemy> within;
+
+  public Cell(final int x, final int y){
+    collision = 0;
+    coordinates[0] = x;
+    coordinates[1] = y;
+  }
+
+  // borrow makes for a nice function to overload
+  public int borrow(final Tuple<Hero,Enemy> option){
+
+    if(option.first == null && option.second == null)}{
+      return 1;
+    }
+    else if(option.first != null){
+      hasHero = true;
+      tuple.within.first = option.first;
+    }
+    else if(option.second != null){
+      hasEnemy = true;
+      tuple.within.second = option.second;
+    }
+    else if(option.first != null && option.second != null){
+      collision = true;
+    }
+    return 0;
+  }
+
+  public boolean hasCollision(){
+    return collision;
+  }
+}
+
 class Room {
 
   private int dimX;
@@ -65,17 +110,19 @@ class Room {
   public void moveHero(int x, int y, Hero hero){
     int index;
     char[] crow = null;
-    int i = 0;
-    for(String row : rmap){
-      index = row.indexOf('H');
-      if(index > -1){
-        crow = row.toCharArray();
-        crow[index] = ' ';
-        rmap.set(i, new String(crow));
-        break;
+    { // enforcing the scope and lifetime of i
+      int i = 0;
+      for(String row : rmap){
+        index = row.indexOf('H');
+        if(index > -1){
+          crow = row.toCharArray();
+          crow[index] = ' ';
+          rmap.set(i, new String(crow));
+          break;
+        }
+        i++;
       }
-      i++;
-    }
+    } // forget i
 
     this.addHero(x, y, hero);
   }
