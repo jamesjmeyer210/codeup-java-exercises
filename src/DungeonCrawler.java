@@ -1,38 +1,56 @@
 import java.util.*;
 
 class Tuple<T,U> {
-
-  public T fisrt;
+  public T first;
   public U second;
+
+  public Tuple(T f, U s){
+    this.first = f;
+    this.second = s;
+  }
 }
 
 class Cell {
 
-  private int coordinates[2];
-  private boolean collision; // read only, externally
-  private boolean hasHero;
-  private boolean hasEnemy;
-  private Tuple<Hero,Enemy> within;
+  protected int coordinates[];
+  protected boolean collision; // read only, externally
+  protected boolean hasHero;
+  protected boolean hasEnemy;
+  protected char view;
+  protected Tuple<Hero,Enemy> within;
 
-  public Cell(final int x, final int y){
-    collision = 0;
+  public Cell(final int x, final int y, char v){
+    collision = false;
+    coordinates = new int[2];
     coordinates[0] = x;
     coordinates[1] = y;
+    view = v;
+  }
+
+  public static int init(Cell self, final int x, final int y, char v){
+    if(self == null){
+      return 1;
+    }
+    self.collision = false;
+    self.coordinates[0] = x;
+    self.coordinates[1] = y;
+    self.view = v;
+    return 0;
   }
 
   // borrow makes for a nice function to overload
   public int borrow(final Tuple<Hero,Enemy> option){
 
-    if(option.first == null && option.second == null)}{
+    if(option.first == null && option.second == null){
       return 1;
     }
     else if(option.first != null){
       hasHero = true;
-      tuple.within.first = option.first;
+      this.within.first = option.first;
     }
     else if(option.second != null){
       hasEnemy = true;
-      tuple.within.second = option.second;
+      this.within.second = option.second;
     }
     else if(option.first != null && option.second != null){
       collision = true;
@@ -40,93 +58,81 @@ class Cell {
     return 0;
   }
 
-  public boolean hasCollision(){
-    return collision;
+  public Tuple<Character,Integer> lendView(){
+    return new Tuple<Character,Integer>(
+      new Character(view),
+      new Integer(0)
+    );
+  }
+
+  public Tuple<Boolean,Integer> hasCollision(){
+    return new Tuple<Boolean,Integer>(
+      new Boolean(this.collision),
+      new Integer(0));
+  }
+
+  public String toString(){
+    return "";
+  }
+}
+
+class Coordinate {
+  int x, y;
+  public Coordinate(int x, int y){
+    this.x = x;
+    this.y = y;
   }
 }
 
 class Room {
 
-  private int dimX;
-  private int dimY;
-
-  private ArrayList<String> rmap;
+  private int xalloc;
+  private int yalloc;
+  private Coordinate[] entrances;
+  private Coordinate[] exits;
+  private Cell[][] cells;
   private ArrayList<Enemy> enemies;
   private Hero hero;
 
-  public Room(int x, int y){
-    rmap = new ArrayList<String>(y);
-    enemies = new ArrayList<Enemy>();
-    drawBlank(x, y);
-  }
+  public Room(Coordinate dim[], Coordinate entrances[], Coordinate exits[]){
 
-  private String horizontalWall(int len){
-    String wall = "";
-    for(int i = 0; i < len; i++){
-      wall += "#";
-    }
-    return wall;
-  }
+    xalloc = dim[0];
+    yalloc = dim[1];
 
-  private void drawBlank(int x, int y){
-    String blank = "";
-    for(int i = 0; i < x; i++){
-      blank += " ";
-    }
+    cells = new Cell[yalloc];
+    for(int i = 0; i < yalloc; i++){
 
-    rmap.add(horizontalWall(x + 2));
-    for(int i = 0; i < y; i++){
-      rmap.add("#" + blank + "#");
-    }
-    rmap.add(horizontalWall(x + 2));
-  }
-
-  public void draw(){
-    for(String row : rmap){
-      System.out.println(row);
-    }
-  }
-
-  public void addEnemy(int x, int y, Enemy enemy){
-    enemies.add(enemy);
-    char[] row = rmap.get(y).toCharArray();
-    row[x] = 'E';
-    try{
-      rmap.set(y, new String(row));
-      enemy.setPosition(x, y);
-    }catch(NullPointerException e){
-      System.err.format("set failed. x: %d, y: %d", x, y);
-    }
-  }
-
-  public void addHero(int x, int y, Hero hero){
-    this.hero = hero;
-    char[] row = rmap.get(y).toCharArray();
-    row[x] = 'H';
-    rmap.set(y, new String(row));
-    hero.setPosition(x, y);
-  }
-
-  public void moveHero(int x, int y, Hero hero){
-    int index;
-    char[] crow = null;
-    { // enforcing the scope and lifetime of i
-      int i = 0;
-      for(String row : rmap){
-        index = row.indexOf('H');
-        if(index > -1){
-          crow = row.toCharArray();
-          crow[index] = ' ';
-          rmap.set(i, new String(crow));
-          break;
-        }
-        i++;
+      cells[i] = new Cell[xalloc](x);
+      for(int j = 0; j < x; j++){
+        cells[i][j] = new Cell(i, j, ' ');
       }
-    } // forget i
+    }
 
-    this.addHero(x, y, hero);
+    xalloc = x;
+    yalloc = y;
   }
-}
+
+  private int drawDefault(){
+
+    int i = 0;
+    int j = 0;
+    for(ArrayList<ArrayList<Cell>> row : this.cells){
+
+      for(Cell col : row){
+        if(i == 0 || j == 0 || i == row.length() - 1 || j == row.length() - 1){
+          col = new Cell(i, j, '#');
+        }else{
+          col = new Cell(i, j, ' ');
+        }
+        j++;
+      }
+      j = 0;
+      i++;
+    }
+    return 0;
+  }
+
+} // END Room
 
 class Hero {
 
