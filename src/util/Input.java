@@ -16,15 +16,15 @@ public class Input {
     this.ioDouble = 0.0;
   }
 
-  public getString(){
+  public String getString(){
     return this.ioString;
   }
 
-  public getInt(){
+  public int getInt(){
     return this.ioInt;
   }
 
-  public getDouble(){
+  public double getDouble(){
     return this.ioDouble;
   }
 
@@ -37,12 +37,12 @@ public class Input {
     }
   }
 
-  public getInt(int min, int max){
+  public void getInt(int min, int max){
     System.out.format("Please enter a number between %d and %d", min, max);
     ioInt = scan.nextInt();
   }
 
-  public getDouble(double min, double max){
+  public void getDouble(double min, double max){
     System.out.format("Please enter a number between %f and %f", min, max);
     ioDouble = scan.nextDouble();
   }

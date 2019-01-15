@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ "$#" -ne "1" ] ; then
+  printf "Invalid input. Try jcc-movies build to compile or jcc-movies run to run.\n"
+fi
+
+if [ "$1" = "build" ] ; then
+  javac -d "bin" \
+    "src/util/Input.java" \
+    "src/movies/Movie.java" \
+    "src/movies/MoviesArray.java" \
+    "src/movies/MoviesApplication.java"
+  printf "Build complete.\n"
+elif [ "$1" = "run" ] ; then
+  cd "bin"
+  java -cp ".:util:movies" "movies/MoviesApplication"
+  cd ..
+fi

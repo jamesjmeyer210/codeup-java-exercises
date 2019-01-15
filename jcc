@@ -8,9 +8,11 @@ if [ "$#" -ne "2" ]; then
   exit 1
 fi
 
+printf "$1 $2 $3\n"
+
 if [ "$1" = "build" ]; then
   javac -d "bin" "src/$2.java"
-elif [ "$1" = "run" ]; then
+elif [ "$1" = "run" ] ;then
   java -cp "bin" "$2"
 else
   printf "Option: $1 not found.\n"
