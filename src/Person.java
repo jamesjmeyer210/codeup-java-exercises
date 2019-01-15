@@ -1,6 +1,6 @@
 class Person {
 
-  private name;
+  private String name;
 
   public Person(String name){
     this.name = name;
