@@ -10,4 +10,16 @@ public class Movie {
     this.genre = genre;
   }
 
+  public String getName(){
+    return this.name;
+  }
+
+  public String getCategory(){
+    return this.genre;
+  }
+
+  public String toString(){
+    return this.name + "\t" + this.genre;
+  }
+
 }
