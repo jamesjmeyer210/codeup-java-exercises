@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ "$#" -ne "1" ] ; then
+  printf "Invalid input. Try jcc-shapes build to compile or jcc-build run to run.\n"
+fi
+
+if [ "$1" = "build" ] ; then
+  javac -d "bin" \
+    "src/shapes/Measurable.java" \
+    "src/shapes/Shape.java" \
+    "src/shapes/Quadrilateral.java" \
+    "src/shapes/Rectangle.java" \
+    "src/shapes/Square.java" \
+    "src/shapes/ShapesTest.java"
+  printf "Build complete.\n"
+elif [ "$1" = "run" ] ; then
+  cd "bin"
+  java -cp ".:shapes" "shapes/ShapesTest"
+  cd ..
+fi
