@@ -17,6 +17,9 @@ public class GradesApplication implements Runnable {
     initArgExit();  // exit
     initArgView();  // view
     initArgUsernames(); // usernames
+    initArgAddStudent();
+    initArgEditStudent();
+    initArgGetAverage();
   }
 
   private void initArgExit(){
@@ -50,6 +53,62 @@ public class GradesApplication implements Runnable {
         String query = fscan.next();
         if(students.containsKey(query)){
           System.out.println(data.get(query).toString());
+        }else{
+          System.out.println("Sorry, a student by the username doesn't exist.");
+        }
+      }
+    });
+  }
+
+  private void initArgAddStudent(){
+    cli.put("add student", new Runnable(){
+
+      Scanner fscan = scan;
+      HashMap<String,Student> data = students;
+
+      public void run(){
+        System.out.print("Please enter the student's github username: ");
+        String uname = fscan.next();
+        System.out.print("Please enter the student's name: ");
+        String name = fscan.next();
+        data.put(uname, new Student(name));
+      }
+    });
+  }
+
+  private void initArgEditStudent(){
+    cli.put("add grade", new Runnable(){
+
+      Scanner fscan = scan;
+      HashMap<String, Student> data = students;
+
+      public void run(){
+        System.out.print("Which student would you like to modify? ");
+        String query = fscan.next();
+        if(students.containsKey(query)){
+          Student stud = data.get(query);
+          System.out.print("Add a grade: ");
+          stud.addGrade(Integer.parseInt(fscan.next()));
+        }else{
+          System.out.println("Sorry, a student by the username doesn't exist.");
+        }
+      }
+    });
+  }
+
+  private void initArgGetAverage(){
+    cli.put("get average", new Runnable(){
+
+      Scanner fscan = scan;
+      HashMap<String, Student> data = students;
+
+      public void run(){
+        System.out.print("Which student would you like to view? ");
+        String query = fscan.next();
+
+        if(students.containsKey(query)){
+          Student stud = data.get(query);
+          System.out.println("" + stud.getGradeAverage());
         }else{
           System.out.println("Sorry, a student by the username doesn't exist.");
         }
